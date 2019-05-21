@@ -1,10 +1,14 @@
 package com.example.rickandmorty;
 
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 
-public class Character {
+@SuppressWarnings("serial")
+public class Character implements Serializable {
 
     @SerializedName("id")
     @Expose

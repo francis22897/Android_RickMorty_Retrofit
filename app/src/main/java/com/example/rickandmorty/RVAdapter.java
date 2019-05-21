@@ -20,7 +20,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.CharacterViewHolde
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         ImageView image;
-        TextView name, id, status, species, gender, origin, lastLocation;
+        TextView name, id, species;
 
         CharacterViewHolder(View itemView){
             super(itemView);
@@ -28,20 +28,18 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.CharacterViewHolde
             image = itemView.findViewById(R.id.character_image);
             name = itemView.findViewById(R.id.name_text);
             id = itemView.findViewById(R.id.id_text);
-            status = itemView.findViewById(R.id.status_text);
             species = itemView.findViewById(R.id.species_text);
-            gender = itemView.findViewById(R.id.gender_text);
-            origin = itemView.findViewById(R.id.origin_text);
-            lastLocation = itemView.findViewById(R.id.lastLocation_text);
         }
     }
 
     List<Character> characters;
     Context context;
+    CustomItemclick customItemclick;
 
-    public RVAdapter(Context context, List<Character> characters){
+    public RVAdapter(Context context, List<Character> characters, CustomItemclick customItemclick){
         this.context = context;
         this.characters = characters;
+        this.customItemclick = customItemclick;
     }
 
     @NonNull
@@ -49,6 +47,13 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.CharacterViewHolde
     public CharacterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(context).inflate(R.layout.character_item, viewGroup, false);
         final CharacterViewHolder cvh = new CharacterViewHolder(v);
+
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customItemclick.onClick(v, characters.get(cvh.getAdapterPosition()).getId());
+            }
+        });
 
         return cvh;
     }
@@ -58,11 +63,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.CharacterViewHolde
         Picasso.get().load(characters.get(i).getImage()).resize(Utils.imageWidth, Utils.imageHeight).into(characterViewHolder.image);
         characterViewHolder.id.setText(String.valueOf(characters.get(i).getId()));
         characterViewHolder.name.setText(characters.get(i).getName());
-        characterViewHolder.status.setText(characters.get(i).getStatus());
         characterViewHolder.species.setText(characters.get(i).getSpecies());
-        characterViewHolder.gender.setText(characters.get(i).getGender());
-        characterViewHolder.origin.setText(characters.get(i).getOrigin().getName());
-        characterViewHolder.lastLocation.setText(characters.get(i).getLocation().getName());
     }
 
     @Override
